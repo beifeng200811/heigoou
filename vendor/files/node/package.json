@@ -4,6 +4,7 @@
     "whistle-start": "../../whistle-start",
     "whistle.chii-internal": "../../whistle.chii-internal",
     "whistle.scriptfile": "../../whistle.scriptfile",
-    "whistle.vase": "^2.2.0"
+    "whistle.sph-download": "file:../../whistle.sph-download",
+    "whistle.vase": "^2.2.2"
   }
 }
