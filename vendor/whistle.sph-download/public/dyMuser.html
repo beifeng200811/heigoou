@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="全网视频抓取工具，可抓取直播地址，对视频号和抖音做了加持。">
+    <meta name="author" content="北封@一个程序猿的异常">
+    <link rel="shortcut icon" href="asserts/hgxt.png" type="image/x-icon">
+    <title>抖音达人监控</title>
+    <link href="asserts/bootstrap.min.css" rel="stylesheet">
+
+    <script src="./asserts/jquery.js" type="text/javascript"></script>
+    <script src="./miniui/miniui.js" type="text/javascript"></script>
+    <link href="./font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="./miniui/themes/default/miniui.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="asserts/icon2.png" type="image/x-icon">
+
+    <link href="./miniui/themes/bootstrap/skin.css" rel="stylesheet" type="text/css" />
+
+    <link href="./miniui/themes/default/medium-mode.css" rel="stylesheet" type="text/css" />
+
+    <link href="./miniui/themes/icons.css" rel="stylesheet" type="text/css" />
+    <link href="asserts/spop.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+    <main role="main">
+        <div class="alert alert-success" role="alert">
+            <p style="margin-bottom:0px;"><b>本页面为抖音达人监控界面，复制达人主页分享链接。</b></p>
+            <hr>
+            <p class="mb-0">
+                遇到问题请在公众号后台留言，我们会尽快解决。
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">将APP分享内容或者浏览器地址栏地址粘贴到下面文本框👇🏻</label>
+            <input type="text" class="form-control" id="tq_url_text" placeholder="达人动态监控" aria-describedby="basic-code">
+        </div>
+
+
+        <div class="input-group mb-3">
+
+            <button type="button" id="dy_down_user_monitor" has_more="true" class="btn btn-primary"><i
+                    class="fa fa-address-card" aria-hidden="true"></i>获取达人信息</button>
+
+            <button type="button" style="margin-left: 5px;" id="dy_down_jiexi_flush" class="btn btn-primary"><i class="fa fa-times"
+                    aria-hidden="true"></i>清空</button>
+            <div class="input-group-prepend" style="margin-left: 5px;">
+                <label class="input-group-text" for="schedule_pin_lv">监控频率：</label>
+            </div>
+            <select class="custom-select" id="schedule_pin_lv" >
+                <option value="5">5分钟</option>
+                <option selected value="10">10分钟</option>
+                <option value="15">15分钟</option>
+                <option value="30">30分钟</option>
+                <option value="59">一小时</option>
+            </select>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="auto_down_load_live">
+                <label class="form-check-label" for="auto_down_load_live">
+                    自动下载直播
+                </label>
+            </div>
+            
+            <button style="margin-left: 5px;" type="button" id="monitor_run_state" disabled class="btn btn-primary"></button>
+            <button style="margin-left: 5px;" type="button" id="dy_monitor_state" class="btn btn-primary"><i class="fa fa-eye" aria-hidden="true"></i> 开始监控</button>
+            <button style="margin-left: 5px;" type="button" id="dy_monitor_state_end" class="btn btn-primary"><i class="fa fa-eye-slash" aria-hidden="true"></i> 停止监控</button>
+            <button style="margin-left: 5px;" type="button" id="dy_monitor_message_qywx" class="btn btn-info"><i class="fa fa-envelope-open-o" aria-hidden="true"></i> 开启群机器人消息推送</button>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">支持企微/钉钉/飞书<br>每行配置一个</span>
+            </div>
+            <textarea class="form-control" id="qywx_monitor_webhook" placeholder="请输入自定义群机器人的webhook地址" rows="3"></textarea>
+            <div class="input-group-append">
+              <span class="input-group-text" id="basic-addon2">
+                <a href="https://mp.weixin.qq.com/s/bAgisrAhisvX5hIX9wXb8w" target="_blank"><i class="fa fa-heartbeat" aria-hidden="true"></i> 查看配置说明</a>
+              </span>
+            </div>
+        </div>
+
+
+        <div id="datagrid1" class="mini-datagrid" style="width:100%;height: 350px; margin-top: 10px;" multiSelect="true"
+            url="/cgi-bin/dy/m/users" showPager="false" pageSize="10000" idField="id" allowResize="true">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="nickname" width="30" align="center" renderer="onDarenMonitorRenderer" headerAlign="center">达人</div>
+                <div field="uniqueId" width="20" align="center" headerAlign="center">抖音号</div>
+                <div field="awemeCount" width="20" align="center" headerAlign="center">作品数</div>
+                <div field="mplatformFollowersCount" width="20" align="center" headerAlign="center">粉丝数</div>
+                <div field="totalFavorited" width="20" align="center" headerAlign="center">获赞数</div>
+                <div field="ipLocation" width="20" align="center" headerAlign="center">IP属地</div>
+                <div field="desc" width="80" align="center" renderer="onClickCopy" headerAlign="center">签名</div>
+                <div name="action" field="id" width="100" headerAlign="center" renderer="onDarenOperationRender">操作
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="asserts/jquery.js"></script>
+    <script src="asserts/bootstrap.min.js"></script>
+    <script src="dy.js"></script>
+    <script src="common.js"></script>
+    <script src="ws.js"></script>
+    <script src="asserts/spop.min.js"></script>
+
+    <script>
+        grid.load();
+        jobStatus();
+    </script>
+
+</body>
+
+</html>

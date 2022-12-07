@@ -1,0 +1,54 @@
+.iproxy-rule-list {
+    background-color: @rule-list-bgcolor;
+    height: calc(100% + 3px);
+    overflow: scroll;
+}
+.iproxy-rule-list-item {
+    padding: 8px 15px 8px 15px;
+    width: 160px;
+    font-size: @rule-item-font-size;
+    background-color: @rule-item-bgcolor;
+    position: relative;
+    // border-bottom: solid 1px @rule-item-border-color;
+
+    color: @font-color-disable;
+
+    &.enabled:before {
+        content: '\25CF';
+        font-size: 12px;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        color: #a7e1c4;
+        transform: translateY(-50%);
+    }
+
+    border-bottom: 1px thin @rule-item-border-color;
+
+    &.selected {
+        background-color: @rule-item-selected-bgcolor;
+        border-bottom: none;
+    }
+
+    &.enabled {
+        color: @font-color;
+    }
+
+}
+
+.iproxy-rule-actionbar {
+    text-align: right;
+    background-color: @rule-list-bgcolor;
+    width: 160px;
+    height: 35px;
+
+    .iproxy-add-rule-btn {
+        border-radius: 5px;
+        height: 25px;
+        padding-top: 0px;
+        margin-top: 5px;
+        * {
+            cursor: pointer;
+        }
+    }
+}

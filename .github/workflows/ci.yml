@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - staging
+      - master
+      - trying
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+      strategy:
+        matrix:
+          os: [windows-latest, macos-latest, ubuntu-latest]
+      runs-on: ${{ matrix.os }}
+      steps:
+        - name: Check out Git repository
+          uses: actions/checkout@v1
+
+        - name: Install Node.js, NPM and Yarn
+          uses: actions/setup-node@v1
+          with:
+            node-version: 14
+            
+        - name: Upgrade whistle
+          run: |
+            git config --global user.email "you@example.com"
+            git config --global user.name "Your Name"
+            npm run upgrade:whistle
+
+        - name: Install deps
+          run: |
+            npm run install-deps
+            npm run dateversion
+
+        - name: build app
+          shell: bash
+          run: |
+            if [[ "$RUNNER_OS" == "Windows" ]]; then
+              npm run dist:win
+              npm run clean:ff:win
+            fi
+
+            if [[ "$RUNNER_OS" == "macOS" ]]; then
+              npm run dist:mac
+              npm run clean:ff:mac
+            fi
+
+            if [[ "$RUNNER_OS" == "Linux" ]]; then
+              npm run dist:linux
+            fi
+          env:
+            GH_TOKEN: ${{ secrets.github_token }}
+
+        - name: upload app
+          uses: actions/upload-artifact@v2
+          with:
+            name: heigoou-${{ runner.OS }}
+            path: |
+              release/*.exe
+              release/*.dmg
+              release/*.AppImage

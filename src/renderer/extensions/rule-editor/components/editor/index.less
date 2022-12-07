@@ -1,0 +1,43 @@
+.iproxy-rule-editor-container {
+    position: absolute;
+    left: 160px;
+    top: 0px;
+    height: 100%;
+    width: calc(100% - 160px);
+
+    .disabled-tip {
+        padding: 5px 20px 5px 20px;
+        font-size: 12px;
+        font-style: oblique;
+        background-color: @rule-disabled-tip-background;
+    }
+
+    .iproxy-code-editor-container {
+        height: 100%;
+        width: 100%;
+    }
+
+    .iproxy-editor-actionbar {
+        text-align: right;
+        background-color: @rule-list-bgcolor;
+        padding-right: 5px;
+        height: 35px;
+        width: 100%;
+
+        .tip {
+            display: inline-block;
+            color: #808080;
+            font-size: 12px;
+            line-height: 35px;
+        }
+    }
+
+    .monaco-editor {
+        height: calc(100% - 80px);
+        -webkit-app-region: no-drag !important;
+
+        * {
+            -webkit-app-region: no-drag !important;
+        }
+    }
+}

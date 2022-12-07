@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<!--https://www.cnblogs.com/yszr/p/16075331.html-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="asserts/icon.png" type="image/x-icon">
+  <title>视频号视频下载工具</title>
+  <link rel="stylesheet" type="text/css" href="asserts/style.css"/>
+</head>
+
+<body>
+
+  <div id="tips"></div>
+  <div id="root">
+    <header>
+      <label style="font-weight: bold;">
+        <!-- <input id="active" type="checkbox" /> -->
+        视频号-视频下载专属工具
+      </label>
+      <button disabled id="update">更新配置</button>
+  
+    </header>
+    <label class="form-control">
+      请输入完整本地存储目录:
+      <input id="sessionsDir" maxlength="3072" type="text" placeholder="请输入完整目录路径" />
+    </label>
+    <button id="data">加载数据</button>
+    <br>
+    <!-- <label class="form-control">
+      是否开启自动下载:
+      <input id="autoDownload" type="checkbox" />
+    </label> -->
+    <!-- <label class="form-control">
+    过滤条件(空表示匹配所有请求，否则只存储匹配的请求):
+    <textarea id="filterText" maxlength="3072" placeholder="请输入过滤条件，具体规则见下面的说明"></textarea>
+  </label> -->
+    <!-- <div class="desc">
+      <image src="asserts/tankdev_qrcode.jpeg"
+        style="display: block; margin-right: auto; margin-left: auto; width: 677px !important; height: auto !important; visibility: visible !important;">
+      </image>
+      <h1 align="center" style="color: red;">开发不易，扫码给个关注吧，谢谢！</h1>
+    </div> -->
+    <div class="demo">
+    </div>
+  </div>
+
+  <script src="jquery.js"></script>
+  <script src="flexImage.js"></script>
+  <script>
+    function playPause(id) {
+      var myVideo=document.getElementById(id); 
+      if (myVideo.paused)
+        myVideo.play();
+      else
+        myVideo.pause();
+    }
+    ; (function () {
+      var flexImage = new FlexImage(document.querySelector('.demo'), {
+        rowHeight: 200,
+        listenResize: true
+      });
+      $('.aClassFlag').click(function (item) {
+          console.log(item)
+      })
+      $('#data').click(function () {
+        $.get({
+          url: '/cgi-bin/data',
+          dataType: 'json',
+          success: function (data) {
+            console.log(data);
+
+            for (var i = 0; i < data.data.data.length; i++) {
+
+              var child = document.createElement('div');
+              child.className = 'fleximage-item';
+              child.setAttribute('data-w', 240);
+              child.setAttribute('data-h', 240);
+              child.innerHTML = '<video id="video_' + i + '" width="' + 240 + '" height="' + 240 + '" >'
+                + '<source src="' + data.data.data[i].url + '" type="video/mp4">'
+                + '</video>'
+                + '<a class="aClassFlag" href="javascript:void(0);" data-vid="video_'+i+'">播放/暂停</a> '
+                + '<a>下载</a>'
+                ;
+              document.querySelector('.demo').appendChild(child);
+            }
+
+
+            flexImage.update();
+          },
+          error: function () {
+            setTimeout(init, 1000);
+          }
+        });
+      });
+      function showMessage(msg, success) {
+        var tips = $('#tips');
+        tips.text(msg);
+        if (success) {
+          tips.addClass('success');
+        } else {
+          tips.removeClass('success');
+        }
+        tips.stop(true, true).show();
+        tips.css('marginLeft', -tips[0].offsetWidth / 2);
+        tips.delay(2000).fadeOut(1600);
+      }
+
+      function initUI(data) {
+        $('#root').show();
+
+        if (data.path) {
+          $('#sessionsDir').val(data.path);
+        }
+        // if (data.autoDownload) {
+        //   $('#autoDownload')[0].checked = true;
+        // }
+        // var activeBox = $('#autoDownload').on('change', ({ target }) => {
+        //   btn[0].disabled = false;
+        // });
+
+        var btn = $('#update');
+        $('#sessionsDir').on('input', function () {
+          btn[0].disabled = false;
+        });
+        btn.click(function () {
+          btn[0].disabled = true;
+          $.post({
+            url: 'cgi-bin/set-settings',
+            dataType: 'json',
+            data: {
+              path: $('#sessionsDir').val().trim()
+              // ,
+              // autoDownload: $('#autoDownload')[0].checked ? 1 : 0
+            },
+            success: function (data) {
+
+              showMessage('更新配置成功', true);
+
+            },
+            error: function () {
+              btn[0].disabled = false;
+              showMessage('提交失败，请稍后重试！');
+            }
+          });
+        });
+      }
+
+      function init() {
+        $.get({
+          url: '/cgi-bin/init',
+          dataType: 'json',
+          success: initUI,
+          error: function () {
+            setTimeout(init, 1000);
+          }
+        });
+      }
+      init();
+      //$('#root').show();
+    })();
+  </script>
+</body>
+
+</html>
