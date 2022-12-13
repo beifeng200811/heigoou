@@ -6,10 +6,8 @@ module.exports = async (ctx) => {
     const { urls } = ctx.request.body;
     const { localStorage } = ctx.req;
     let openId = localStorage.getProperty('user_open_id');
-    console.log(urls)
     const secInfo = paserSecUid(urls,openId);
 
-    console.log(secInfo)
     // TODO 校验用户过期
     const secUid = secInfo.body.secUid;
     const cookie = await cookies();
