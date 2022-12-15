@@ -211,6 +211,10 @@
                         <p></p>
                         
                         <div class="btn-group">
+
+                            <button type="button" data-show-url="{{item.showUrl}}" class="copy-url btn btn-sm btn-success">复制视频源地址</button>
+
+                        
                             {{if item.type=='sph'}}
                             <button type="button" data-down-real-id="{{item._id}}" data-down-filename="{{item.dealId}}" class="sph-down btn btn-sm btn-success">超清下载</button>
                             {{else if item.type=='global'}}
